@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .chat-container {
+      width: 360px;
+      background: #1a1a2e;
+      border-radius: 18px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .chat-container h2 {
+      margin: 0;
+      padding: 20px;
+      font-size: 20px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+    }
+
+    .messages {
+      height: 350px;
+      overflow-y: auto;
+      padding: 20px;
+      background-color: #0f0f1c;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .message-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 14px;
+      max-width: 75%;
+      line-height: 1.5;
+    }
+
+    .user {
+      background: #5a67d8;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 0;
+    }
+
+    .bot {
+      background: #2d2f40;
+      color: #e0e0e0;
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 15px;
+      background-color: #1a1a2e;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+      background-color: #2d2f40;
+      color: white;
+    }
+
+    input[type="text"]::placeholder {
+      color: #b0b3c1;
+    }
+
+    button {
+      background-color: #5a67d8;
+      border: none;
+      color: white;
+      border-radius: 12px;
+      font-weight: 600;
+      padding: 0 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #434190;
+    }
+
+    .chat-toggle-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      z-index: 1001;
+    }
+
+    @media (max-width: 768px) {
+      .chat-container {
+        width: 90%;
+        right: 5%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">Traffic Fine Management</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="/profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-danger text-white fw-semibold px-3" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Welcome Section -->
+  <div class="container mt-5">
+    <h2>Welcome, {{ user.name }}!</h2>
+
+    <div class="mt-4">
+      <h3 class="text-primary">🚦 Traffic Rules & Safety Tips 🚲</h3>
+      <div class="row mt-3">
+        <!-- Tip Cards -->
+        <div class="col-md-4">
+          <div class="card shadow-lg border-0 p-3">
+            <div class="card-body">
+              <h5 class="card-title">Wear a Helmet 🏍️</h5>
+              <p class="card-text">Always wear a helmet while riding a two-wheeler. It reduces head injuries by 70%.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card shadow-lg border-0 p-3">
+            <div class="card-body">
+              <h5 class="card-title">Follow Traffic Signals 🚦</h5>
+              <p class="card-text">Always obey traffic lights and road signs. Running a red light can be fatal.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card shadow-lg border-0 p-3">
+            <div class="card-body">
+              <h5 class="card-title">No Mobile While Driving 📵</h5>
+              <p class="card-text">Avoid using mobile phones while riding or driving. It distracts and leads to accidents.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mt-3">
+          <div class="card shadow-lg border-0 p-3">
+            <div class="card-body">
+              <h5 class="card-title">Speed Limits 🚘</h5>
+              <p class="card-text">Stay within the speed limit. Speeding increases accident risk significantly.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mt-3">
+          <div class="card shadow-lg border-0 p-3">
+            <div class="card-body">
+              <h5 class="card-title">Use Seat Belts & Indicators 🚗</h5>
+              <p class="card-text">Always wear seat belts and use indicators while turning to ensure road safety.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mt-3">
+          <div class="card shadow-lg border-0 p-3">
+            <div class="card-body">
+              <h5 class="card-title">Don't Drink & Drive 🍺🚫</h5>
+              <p class="card-text">Never drive under the influence of alcohol or drugs. It endangers lives.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Toggle Button -->
+  <div class="chat-toggle-btn" onclick="toggleChat()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
+      <path d="M2 2v20l4-4h16V2H2zm16 10H6v-2h12v2zm0-3H6V7h12v2zm0-3H6V4h12v2z"/>
+    </svg>
+  </div>
+
+  <!-- Chat Box -->
+  <div class="chat-container" id="chat-container">
+    <h2>ChatBot</h2>
+    <div class="messages" id="chat-box"></div>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Type your message..." />
+      <button onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function toggleChat() {
+      const chatBox = document.getElementById('chat-container');
+      chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value.trim();
+      if (!message) return;
+
+      const chatBox = document.getElementById('chat-box');
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.textContent = message;
+      chatBox.appendChild(userMsg);
+
+      input.value = "";
+      input.disabled = true;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'message bot';
+        botMsg.textContent = data.response ? data.response : "Error: " + (data.error || "Unknown error");
+        chatBox.appendChild(botMsg);
+
+      } catch (err) {
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'message bot';
+        errorMsg.textContent = "Error communicating with chatbot.";
+        chatBox.appendChild(errorMsg);
+        console.error(err);
+      } finally {
+        input.disabled = false;
+        input.focus();
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    }
+
+    document.getElementById("user-input").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+  </script>
+
+</body>
+</html>

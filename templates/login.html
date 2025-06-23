@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons (optional) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+  background: url('https://images.unsplash.com/photo-1465447142348-e9952c393450?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center/cover;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.card {
+  border-radius: 20px;
+  backdrop-filter: blur(20px); /* Stronger blur for glass effect */
+  background-color: rgba(255, 255, 255, 0.3); /* More transparent background */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+.card:hover {
+  transform: translateY(-10px); /* Slight upward movement on hover */
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.btn-primary {
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 119, 255, 0.25);
+}
+  </style>
+</head>
+<body>
+
+<div class="container vh-100">
+  <div class="row justify-content-center align-items-center h-100">
+    <div class="col-md-5">
+      <div class="card p-4 shadow">
+        <div class="card-body">
+          <h2 class="text-center mb-4 fw-bold text-primary">
+            <i class="bi bi-person-circle me-2"></i>Login
+          </h2>
+
+          <!-- Error Message -->
+          {% if request.args.get("error") %}
+            <div class="alert alert-danger" role="alert">
+              {{ request.args.get("error") }}
+            </div>
+          {% endif %}
+
+          <form id="loginForm" action="/login" method="POST" novalidate>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+              <div class="invalid-feedback">Please enter a valid email.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+              <div class="invalid-feedback">Please enter your password.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+          </form>
+
+          <div class="text-center mt-3">
+            <p class="mb-1">Don't have an account? <a href="/signup" class="fw-semibold text-decoration-underline">Sign up</a></p>
+            <p><a href="/admin/login" class="text-danger fw-bold">Admin Login</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript for Form Validation -->
+<script>
+  document.getElementById("loginForm").addEventListener("submit", function(event) {
+    let form = event.target;
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    form.classList.add("was-validated");
+  });
+</script>
+
+</body>
+</html>

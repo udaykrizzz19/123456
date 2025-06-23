@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">Traffic Fine Management</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="text-primary">✏️ Edit Profile</h2>
+
+        <div class="card shadow-lg border-0 p-4 mt-3">
+            <div class="card-body">
+                <form action="/edit_profile" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" value="{{ user.name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text" name="phone" class="form-control" value="{{ user.phone }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">License Plate</label>
+                        <input type="text" name="license_plate" class="form-control" value="{{ user.license_plate }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Upload License Image</label>
+                        <input type="file" name="license_image" class="form-control">
+                        {% if user.license_image %}
+                            <img src="{{ user.license_image }}" alt="License Image" class="img-fluid rounded shadow mt-2" style="max-width: 200px;">
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
